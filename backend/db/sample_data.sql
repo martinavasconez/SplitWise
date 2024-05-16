@@ -15,6 +15,6 @@ INSERT INTO Usuario_Grupo (usuario_id, grupo_id) VALUES (2, 1000); -- Martina jo
 
 -- Inserting Articles
 -- Assuming Gaby buys 2 items and Martina buys 1 item
-INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1, 1, 'Botella', 30.00);
-INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1, 1, 'Uber', 10.00);
-INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1, 2, 'Entradas', 50.00);
+INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1000, 1, 'Botella', 30.00);
+INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1000, 1, 'Uber', 10.00);
+INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (1000, 2, 'Entradas', 50.00);
