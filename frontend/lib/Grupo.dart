@@ -1,20 +1,18 @@
 class Grupo {
   int id;
   String nombre;
-  String detalles;
   Map<int, Map<String, double>> articulos; // Mapa de usuario ID a artículos y costo
   double total;
   Map<int, double> totalPorUsuario; // Total gastado por cada usuario
   Map<int, Map<int, double>> deudaPorUsuario; // Deuda de cada usuario hacia otros usuarios
-  
+
   Grupo({
     required this.id,
     required this.nombre,
-    required this.detalles,
-    required this.articulos,
-    required this.total,
-    required this.totalPorUsuario,
-    required this.deudaPorUsuario,
+    this.articulos = const {},
+    this.total = 0,
+    this.totalPorUsuario = const {},
+    this.deudaPorUsuario = const {},
   });
 
   // Método para añadir un artículo al grupo

@@ -1,17 +1,17 @@
-import '/Grupo.dart';
+import 'Grupo.dart';
 
 class Usuario {
-  int id;
+  int? id;
   String nombre;
   String correo;
   String password;
-  List<Grupo> listaDeGrupos; 
-  
+  List<Grupo> listaDeGrupos;
+
   Usuario({
-    required this.id,
-    required this.nombre,
-    required this.correo,
-    required this.password,
+    this.id,
+    this.nombre = "", // Inicialización con cadena vacía
+    this.correo = "", // Inicialización con cadena vacía
+    this.password = "", // Inicialización con cadena vacía
     required this.listaDeGrupos,
   });
 }

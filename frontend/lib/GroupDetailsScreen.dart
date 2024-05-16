@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
-import 'AddItemScreen.dart';
 import 'TotalScreen.dart';
+import 'AddItemScreen.dart'; // Asegúrate de crear esta pantalla
 
 class GroupDetailsScreen extends StatefulWidget {
   @override
   _GroupDetailsScreenState createState() => _GroupDetailsScreenState();
 }
 
-class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
+class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTickerProviderStateMixin {
+  TabController? _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,64 +29,136 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
         title: Text('Plan Zens'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Details'),
+            Tab(text: 'Members'),
+            Tab(text: 'Items'),
+          ],
+          indicatorColor: Colors.black,
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Details',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Details',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Here are the details of the group...',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                Spacer(),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Members',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '2 members in the group',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => TotalScreen()));
+                    },
+                    child: Text('Get Budget'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
+                    foregroundColor: Colors.white,    // Color del texto   // Color del texto
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
             ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                '2 members in the group',
-                style: TextStyle(fontSize: 18),
-              ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Items',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      Card(
+                        child: ListTile(
+                          leading: Icon(Icons.shopping_cart),
+                          title: Text('BOTELLA'),
+                          subtitle: Text('Gaby'),
+                          trailing: Text('\$70'),
+                        ),
+                      ),
+                      Card(
+                        child: ListTile(
+                          leading: Icon(Icons.shopping_cart),
+                          title: Text('UBER'),
+                          subtitle: Text('Martina'),
+                          trailing: Text('\$5'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => AddItemScreen()));
+                  },
+                  child: Icon(Icons.add),
+                  backgroundColor: Color.fromARGB(255, 78, 179, 204),
+                ),
+                SizedBox(height: 16),
+              ],
             ),
-            ListTile(
-              title: Text('BOTELLA'),
-              subtitle: Text('Gaby'),
-              trailing: Text('\$70'),
-            ),
-            ListTile(
-              title: Text('UBER'),
-              subtitle: Text('Martina'),
-              trailing: Text('\$5'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddItemScreen()));
-                },
-                child: Icon(Icons.add),
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TotalScreen()));
-                },
-                child: Text('Get Budget'),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
