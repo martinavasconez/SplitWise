@@ -23,7 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
     Usuario? usuario = await Usuario.signIn(email, password);
     Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => GroupScreen()),
+        MaterialPageRoute(builder: (context) => GroupScreen(usuario: usuario,)),
       );
     
   } catch (e) {

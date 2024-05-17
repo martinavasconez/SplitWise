@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Usuario newUser = await Usuario.signUp(nameController.text, emailController.text, passwordController.text);
 
                     // Navigate to SignInScreen on success
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => GroupScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => GroupScreen(usuario: newUser,)));
 
                     // Clear text fields
                     nameController.clear();

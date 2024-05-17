@@ -1,13 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'CreateGroupScreen.dart';
 import 'JoinGroupScreen.dart';
 import 'GroupDetailsScreen.dart'; // Asegúrate de importar la pantalla de detalles del grupo
 import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
+import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
 
 class GroupScreen extends StatefulWidget {
   final Grupo? group; // Ahora group puede ser nulo
+  final Usuario? usuario;
 
-  GroupScreen({this.group});
+  GroupScreen({this.group, this.usuario});
 
   @override
   _GroupScreenState createState() => _GroupScreenState();
@@ -64,12 +68,12 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                "Johanna Doe",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.nombre?? "Johanna Doe", // Use usuario's nombre or default
+                style: TextStyle(color: Colors.black),
               ),
               accountEmail: Text(
-                "johanna@company.com",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.correo?? "johanna@company.com", // Use usuario's email or default
+                style: TextStyle(color: Colors.black),
               ),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('assets/images/JeanDoe.png'), // Ruta de la imagen de perfil
@@ -79,6 +83,7 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
                 color: const Color.fromARGB(255, 255, 255, 255),
               ),
             ),
+
             ListTile(
               leading: Icon(Icons.group),
               title: Text(
