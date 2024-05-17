@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'CreateGroupScreen.dart';
 import 'JoinGroupScreen.dart';
@@ -30,6 +28,19 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
   void dispose() {
     _tabController?.dispose();
     super.dispose();
+  }
+
+  Widget buildGroupCard(String groupName, String groupCode) {
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.group),
+        title: Text(groupName),
+        subtitle: Text('Code: $groupCode'),
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailsScreen()));
+        },
+      ),
+    );
   }
 
   @override
@@ -68,54 +79,51 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                widget.usuario?.nombre?? "Johanna Doe", // Use usuario's nombre or default
+                widget.usuario?.nombre ?? "Johanna Doe",
                 style: TextStyle(color: Colors.black),
               ),
               accountEmail: Text(
-                widget.usuario?.correo?? "johanna@company.com", // Use usuario's email or default
+                widget.usuario?.correo ?? "johanna@company.com",
                 style: TextStyle(color: Colors.black),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/JeanDoe.png'), // Ruta de la imagen de perfil
+                backgroundImage: AssetImage('assets/images/JeanDoe.png'),
                 backgroundColor: Colors.white,
               ),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 255, 255, 255),
               ),
             ),
-
             ListTile(
               leading: Icon(Icons.group),
               title: Text(
                 'Groups',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
-                Navigator.pop(context); // Cierra el drawer
+                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.group_add),
               title: Text(
                 'Create Group',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
-                Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CreateGroupScreen()));
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen()));
               },
             ),
             ListTile(
               leading: Icon(Icons.input),
               title: Text(
                 'Join Group',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
-                Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => JoinGroupScreen()));
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen()));
               },
             ),
           ],
@@ -126,57 +134,14 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
         children: [
           ListView(
             children: [
-              // Aquí mostramos el nuevo grupo como una tarjeta en la lista de grupos
               if (widget.group != null)
-                Card(
-                  child: ListTile(
-                    leading: Icon(Icons.group),
-                    title: Text(widget.group!.nombre ?? ''), // Nombre del grupo
-                    // Subtítulo con más detalles del grupo si es necesario
-                    subtitle: Text('Code: ${widget.group!.id ?? ''}'), // ID del grupo
-                    onTap: () {
-                      // Navegación a GroupDetailsScreen al tocar el grupo
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailsScreen()));
-                    },
-                  ),
-                ),
+                buildGroupCard(widget.group!.nombre ?? '',('Code: ${widget.group!.id ?? ''}')),
               // Cards que ya estaban implementadas
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.group),
-                  title: Text('Plan Zens'),
-                  subtitle: Text('Code: 1139'),
-                  onTap: () {
-                    // Navegación a GroupDetailsScreen al tocar el grupo
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => GroupDetailsScreen()));
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.group),
-                  title: Text('Restaurante KFC'),
-                  subtitle: Text('Code: 3365'),
-                  onTap: () {
-                    // Navegación a GroupDetailsScreen al tocar el grupo
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => GroupDetailsScreen()));
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.group),
-                  title: Text('Uber'),
-                  subtitle: Text('Code: 3434'),
-                  onTap: () {
-                    // Navegación a GroupDetailsScreen al tocar el grupo
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => GroupDetailsScreen()));
-                  },
-                ),
-              ),
+              buildGroupCard('Plan Zens', '1139'),
+              buildGroupCard('Restaurante KFC', '3365'),
+              buildGroupCard('Uber', '3434'),
+              buildGroupCard('Otro', '234'),
+              buildGroupCard('Otro', '12114'),
             ],
           ),
         ],
