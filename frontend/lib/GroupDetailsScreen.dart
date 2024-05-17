@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'TotalScreen.dart';
 import 'AddItemScreen.dart'; // Asegúrate de crear esta pantalla
+import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
+import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
 
 class GroupDetailsScreen extends StatefulWidget {
+  final Usuario? usuario;
+  final Grupo? group;
+
+  GroupDetailsScreen({this.group, this.usuario});
+
   @override
   _GroupDetailsScreenState createState() => _GroupDetailsScreenState();
 }
@@ -111,7 +118,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                     child: Text('Get Budget'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
-                      foregroundColor: Colors.white,    // Color del texto   // Color del texto
+                      foregroundColor: Colors.white,    // Color del texto
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -147,7 +154,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => AddItemScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => AddItemScreen(group: widget.group, usuario: widget.usuario)));
                   },
                   child: Icon(Icons.add),
                   backgroundColor: Color.fromARGB(255, 78, 179, 204),

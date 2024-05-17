@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinal/CreateGroupScreen.dart';
-import 'package:proyectofinal/GroupDetailsScreen.dart';
-import 'GroupScreen.dart';
+import 'package:proyectofinal/GroupScreen.dart';
+import 'GroupDetailsScreen.dart';
 import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
 import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
 
 class JoinGroupScreen extends StatefulWidget {
+  final Usuario? usuario;
+  final Grupo? group;
+
+  JoinGroupScreen({this.group, this.usuario});
+
   @override
   _JoinGroupScreenState createState() => _JoinGroupScreenState();
 }
@@ -93,7 +98,8 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
                               context,
                               MaterialPageRoute(
                                 builder: (_) => GroupScreen(
-                                  group: Grupo(id: 1, nombre: 'Group Code')
+                                  group: Grupo(id: 1, nombre: 'Group Code'),
+                                  usuario: widget.usuario,
                                 ),
                               ),
                             );
@@ -101,7 +107,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
                           child: Text('Join Group'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
-                            foregroundColor: Colors.white,    // Color del texto// Color del texto
+                            foregroundColor: Colors.white,    // Color del texto
                             padding: EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),

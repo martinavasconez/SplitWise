@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'Grupo.dart';
+import 'Usuario.dart';
 
 class TotalScreen extends StatefulWidget {
+  final Usuario? usuario;
+  final Grupo? group;
+
+  TotalScreen({this.group, this.usuario});
+
   @override
   _TotalScreenState createState() => _TotalScreenState();
 }

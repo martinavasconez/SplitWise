@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:proyectofinal/JoinGroupScreen.dart';
 import 'GroupScreen.dart';
 import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
+import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
 
 class CreateGroupScreen extends StatefulWidget {
+  final Usuario? usuario;
+  final Grupo? group;
+
+  CreateGroupScreen({this.group, this.usuario});
+
   @override
   _CreateGroupScreenState createState() => _CreateGroupScreenState();
 }
 
-class _CreateGroupScreenState extends State<CreateGroupScreen> with SingleTickerProviderStateMixin {
+class _CreateGroupScreenState extends State<CreateGroupScreen>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
   final TextEditingController groupNameController = TextEditingController();
   final TextEditingController detailsController = TextEditingController();
@@ -46,7 +53,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> with SingleTicker
     // Lógica para crear el grupo
     // En este punto, podrías guardar el nuevo grupo en tu base de datos o realizar otras acciones necesarias
     // En este ejemplo, simplemente lo pasamos a la pantalla GroupScreen
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(group: newGroup)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(group: newGroup, usuario: widget.usuario)));
   }
 
   @override
@@ -214,4 +221,3 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> with SingleTicker
     );
   }
 }
-

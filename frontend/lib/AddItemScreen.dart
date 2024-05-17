@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'Grupo.dart';
+import 'Usuario.dart';
 
 class AddItemScreen extends StatefulWidget {
+  final Usuario? usuario;
+  final Grupo? group;
+  
+
+  AddItemScreen({this.group, this.usuario});
+
   @override
   _AddItemScreenState createState() => _AddItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> with SingleTickerProviderStateMixin {
+class _AddItemScreenState extends State<AddItemScreen>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
