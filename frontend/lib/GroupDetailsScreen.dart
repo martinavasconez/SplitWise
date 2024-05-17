@@ -22,6 +22,17 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
     super.dispose();
   }
 
+  Widget buildItemCard(String title, String price) {
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.shopping_cart),
+        title: Text(title),
+        subtitle: Text('Gaby'), // Aquí puedes cambiar el nombre dinámicamente si es necesario
+        trailing: Text('\$$price'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +111,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                     child: Text('Get Budget'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
-                    foregroundColor: Colors.white,    // Color del texto   // Color del texto
+                      foregroundColor: Colors.white,    // Color del texto   // Color del texto
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -128,22 +139,9 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 Expanded(
                   child: ListView(
                     children: [
-                      Card(
-                        child: ListTile(
-                          leading: Icon(Icons.shopping_cart),
-                          title: Text('BOTELLA'),
-                          subtitle: Text('Gaby'),
-                          trailing: Text('\$70'),
-                        ),
-                      ),
-                      Card(
-                        child: ListTile(
-                          leading: Icon(Icons.shopping_cart),
-                          title: Text('UBER'),
-                          subtitle: Text('Martina'),
-                          trailing: Text('\$5'),
-                        ),
-                      ),
+                      buildItemCard('BOTELLA', '70'),
+                      buildItemCard('UBER', '5'),
+                      buildItemCard('otro', '15'),
                     ],
                   ),
                 ),

@@ -27,12 +27,6 @@ class _AddItemScreenState extends State<AddItemScreen> with SingleTickerProvider
     return Scaffold(
       appBar: AppBar(
         title: Text('Item'),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-        ),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -116,7 +110,7 @@ class _AddItemScreenState extends State<AddItemScreen> with SingleTickerProvider
                     child: Text('Add Item'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
-                    foregroundColor: Colors.white,    // Color del texto// Color del texto
+                      foregroundColor: Colors.white, // Color del texto
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
