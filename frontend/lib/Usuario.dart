@@ -63,4 +63,25 @@ class Usuario {
   }
 
 
+  Future<void> fetchGroups() async {
+  int? userId = id; // Removed unnecessary 'this.'
+  final response = await http.get(
+    Uri.parse('${api.apiBaseUrlEmulator}/groups/$userId'), // Removed unnecessary braces
+    headers: {'Content-Type': 'application/json'},
+  );
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    List<Grupo> groups = [];
+    for (var group in jsonResponse) {
+      groups.add(Grupo.fromJson(group));
+    }
+    listaDeGrupos = groups; // Directly assign without 'this.'
+
+  } else {
+    throw Exception('Failed to fetch groups');
+  }
+}
+
 }

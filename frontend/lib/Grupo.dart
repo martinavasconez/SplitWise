@@ -20,6 +20,18 @@ class Grupo {
     this.listaDeUsuarios = const {},
   });
 
+  factory Grupo.fromJson(Map<String, dynamic> json) {
+  return Grupo(
+    id: json['id'],
+    nombre: json['nombre'],
+    detalles: json['detalles']?? "", // Provide a default value in case 'detalles' is null
+    total: double.tryParse(json['total'])?? 0.0, // Attempt to parse 'total' as a double, defaulting to 0.0 if parsing fails
+  );
+}
+
+
+
+
   // Método para añadir un artículo al grupo
   void addArticulo(int usuarioId, String nombreArticulo, double costo) {
     if (articulos.containsKey(usuarioId)) {

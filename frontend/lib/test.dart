@@ -1,14 +1,18 @@
 import 'package:proyectofinal/Usuario.dart'; // Adjust the import path according to your project structure
-
+import 'package:proyectofinal/Grupo.dart'; // Adjust the import path according to your project structure
 void main() async {
-  String name = 'John';
-  String email = 'john@example.com';
+  String email = 'gaby@example.com';
   String password = 'pass';
 
-  // Call the signIn method
-  Usuario ?user = await Usuario.signUp(name, email, password);
+  // Grupo grupo = Grupo(id: 1, nombre: 'Grupo 1', detalles: 'Detalles del grupo', total: 100.0);
+  // List<Grupo> listaDeGrupos = [grupo];
 
-  print(user);
+  // Call the signIn method
+  Usuario ?user = await Usuario.signIn(email, password);
+
+
+  await user?.fetchGroups();
+  print(user?.listaDeGrupos.length);
 
 
 
