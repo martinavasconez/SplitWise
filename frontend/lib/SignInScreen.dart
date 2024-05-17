@@ -12,63 +12,42 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Creamos algunos usuarios para simular la base de datos de usuarios
-  List<Usuario> listaDeUsuarios = [
-    Usuario(
-      id: 1,
-      nombre: 'Juan',
-      correo: 'juan@example.com',
-      password: '123456',
-      listaDeGrupos: [],
-    ),
-    Usuario(
-      id: 2,
-      nombre: 'María',
-      correo: 'maria@example.com',
-      password: 'password',
-      listaDeGrupos: [],
-    ),
-  ];
 
-  void _signIn() {
-    // Obtenemos el correo y la contraseña ingresados por el usuario
-    String email = emailController.text;
-    String password = passwordController.text;
+  void _signIn() async {
+  // Obtenemos el correo y la contraseña ingresados por el usuario
+  String email = emailController.text;
+  String password = passwordController.text;
 
-    // Buscamos si existe un usuario con el correo y contraseña proporcionados
-    Usuario usuario = listaDeUsuarios.firstWhere(
-      (user) => user.correo == email && user.password == password,
-      orElse: () => Usuario(id: -1, nombre: "", correo: "", password: "", listaDeGrupos: []),
-    );
-
-    // Si se encontró un usuario con las credenciales proporcionadas
-    if (usuario.id != -1) {
-      // Simular un inicio de sesión exitoso y redirigir al usuario a la pantalla principal
-      Navigator.pushReplacement(
+  try {
+    // Intentamos iniciar sesión usando el método signIn de Usuario
+    Usuario? usuario = await Usuario.signIn(email, password);
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => GroupScreen()),
       );
-    } else {
-      // Si no se encontró un usuario, mostramos un mensaje de error al usuario
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error de inicio de sesión'),
-            content: Text('Credenciales incorrectas. Por favor, inténtalo de nuevo.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Aceptar'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    
+  } catch (e) {
+    // Manejo de excepciones para errores inesperados durante el proceso de inicio de sesión
+    print("Error al iniciar sesión: $e");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error de inicio de sesión'),
+          content: Text('Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

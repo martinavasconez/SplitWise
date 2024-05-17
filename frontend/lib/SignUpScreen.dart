@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'SignInScreen.dart';
 import 'Usuario.dart'; // Importa la clase Usuario
+import 'GroupScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -104,26 +105,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Verifica que todos los campos estén completos antes de crear el objeto Usuario
-                  if (nameController.text.isNotEmpty &&
-                      emailController.text.isNotEmpty &&
-                      passwordController.text.isNotEmpty) {
-                    setState(() {
-                      // Crea el objeto Usuario con los datos ingresados
-                      usuario = Usuario(
-                        nombre: nameController.text,
-                        correo: emailController.text,
-                        password: passwordController.text,
-                        listaDeGrupos: [],
-                      );
-                    });
-
-                    // Redirige al usuario a la pantalla de inicio de sesión
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => SignInScreen()));
+                onPressed: () async {
+                  if (nameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Error"),
+                          content: const Text("Please fill all fields"),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    return;
                   }
-                  // Si algún campo está vacío, puedes mostrar un mensaje o realizar otra acción
+                  try {
+                    // Use the signUp method from Usuario.dart
+                    Usuario newUser = await Usuario.signUp(nameController.text, emailController.text, passwordController.text);
+
+                    // Navigate to SignInScreen on success
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => GroupScreen()));
+
+                    // Clear text fields
+                    nameController.clear();
+                    emailController.clear();
+                    passwordController.clear();
+                  } catch (e) {
+                    // Show an alert dialog on error
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Error"),
+                          content: Text(e.toString()),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
+
                 child: Text('Continue'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 78, 179, 204),

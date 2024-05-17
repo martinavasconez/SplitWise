@@ -1,18 +1,21 @@
 import 'package:http/http.dart' as http;
 import '/config/api.dart' as api; // Import the Api class
 import 'dart:convert';
+import 'Grupo.dart';
 
 class Usuario {
   int? id;
   String nombre;
   String correo;
   String password;
+  List<Grupo> listaDeGrupos;
 
   Usuario({
     this.id,
     required this.nombre,
     required this.correo,
     required this.password,
+    this.listaDeGrupos = const [],
   });
 
   // Factory constructor that creates a Usuario instance from a JSON object
