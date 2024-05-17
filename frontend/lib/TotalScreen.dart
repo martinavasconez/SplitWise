@@ -91,7 +91,7 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$70',
+                        '\$${widget.group!.total.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 24,
                           color: Colors.white,

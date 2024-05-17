@@ -118,7 +118,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => TotalScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => TotalScreen(usuario: widget.usuario, group: widget.group,)));
                     },
                     child: Text('Get Budget'),
                     style: ElevatedButton.styleFrom(
