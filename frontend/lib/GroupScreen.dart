@@ -38,6 +38,8 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
         subtitle: Text('Code: $groupCode'),
         onTap: () {
         Grupo grupoSeleccionado = widget.usuario!.getGroupById(int.parse(groupCode))!;
+        grupoSeleccionado.updateGroupDetails();
+        grupoSeleccionado.updateDeudaPorUsuario();
          Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailsScreen(group: grupoSeleccionado, usuario: widget.usuario)));
 },
 

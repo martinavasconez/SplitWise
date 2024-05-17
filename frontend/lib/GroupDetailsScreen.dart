@@ -21,6 +21,11 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    // Call updateGroupDetails and updateDeudaPorUsuario at the beginning
+    widget.group?.updateGroupDetails().then((_) {
+      widget.group?.updateDeudaPorUsuario();
+    });
   }
 
   @override
@@ -29,13 +34,13 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
     super.dispose();
   }
 
-  Widget buildItemCard(String title, String price) {
+  Widget buildItemCard(int userId, String itemName, double cost) {
     return Card(
       child: ListTile(
         leading: Icon(Icons.shopping_cart),
-        title: Text(title),
-        subtitle: Text(widget.group!.nombre!), // Muestra el nombre del grupo
-        trailing: Text('\$$price'),
+        title: Text(itemName),
+        subtitle: Text(widget.group!.listaDeUsuarios[userId]?? 'Unknown User'), // Display user name
+        trailing: Text('\$$cost'),
       ),
     );
   }
@@ -44,7 +49,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.group!.nombre!), // Muestra el nombre del grupo en la barra de navegación
+        title: Text(widget.group!.nombre),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -80,7 +85,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 SizedBox(height: 10),
                 Text(
-                  widget.group!.detalles ?? 'No details available', // Muestra los detalles del grupo si están disponibles
+                  widget.group!.detalles?? 'No details available',
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -103,12 +108,11 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 SizedBox(height: 10),
                 Text(
-                '${widget.group!.miembros.length} members in the group',
+                  '${widget.group!.listaDeUsuarios.length} members in the group',
                   style: TextStyle(
-                  fontSize: 14,
-                 ),
-              ),
-
+                    fontSize: 14,
+                  ),
+                ),
                 SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
@@ -118,8 +122,8 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                     },
                     child: Text('Get Budget'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
-                      foregroundColor: Colors.white,    // Color del texto
+                      backgroundColor: Color.fromARGB(255, 78, 179, 204),
+                      foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -145,12 +149,17 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 SizedBox(height: 20),
                 Expanded(
-                  child: ListView(
-                    children: [
-                      buildItemCard('BOTELLA', '70'),
-                      buildItemCard('UBER', '5'),
-                      buildItemCard('otro', '15'),
-                    ],
+                  child: ListView.builder(
+                    itemCount: widget.group!.articulos.keys.length,
+                    itemBuilder: (context, index) {
+                      int userId = widget.group!.articulos.keys.elementAt(index);
+                      Map<String, double> userItems = widget.group!.articulos[userId]!;
+                      return Column(
+                        children: userItems.entries.map((entry) {
+                          return buildItemCard(userId, entry.key, entry.value);
+                        }).toList(),
+                      );
+                    },
                   ),
                 ),
                 FloatingActionButton(

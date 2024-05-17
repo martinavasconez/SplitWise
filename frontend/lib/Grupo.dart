@@ -125,6 +125,7 @@ class Grupo {
 
     print('Deudas updated successfully');
   } else {
+    return;
     throw Exception('Failed to update deudas');
   }
 }
