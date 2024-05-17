@@ -76,4 +76,57 @@ class Grupo {
     }
   }
 
+  Future<void> addItem(String nombreArticulo, double costo, int userId) async {
+    final response = await http.post(
+      Uri.parse('${api.apiBaseUrlEmulator}/add_item'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'grupo_id': id,
+        'user_id': userId,
+        'nombre_articulo': nombreArticulo,
+        'costo': costo.toString(), // Convertir costo a string para enviarlo en JSON
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      // Item added successfully, you can update local state if necessary
+      print('Item added successfully');
+    } else {
+      // Handle error
+      print('Failed to add item');
+      throw Exception('Failed to add item');
+    }
+  }
+
+  Future<void> updateDeudaPorUsuario() async {
+  final response = await http.post(
+    Uri.parse('${api.apiBaseUrlEmulator}/update-deudas/$id'),
+    headers: {'Content-Type': 'application/json'},
+  );
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    Map<int, Map<int, double>> deudaPorUsuario = {};
+
+    // Parse the deuda_por_usuario field from the response
+    if (jsonResponse['deuda_por_usuario']!= null) {
+      for (var debtorId in jsonResponse['deuda_por_usuario'].keys) {
+        Map<int, double> debts = {};
+        for (var creditorId in jsonResponse['deuda_por_usuario'][debtorId].keys) {
+          double debtAmount = double.parse(jsonResponse['deuda_por_usuario'][debtorId][creditorId]);
+          debts[int.parse(creditorId)] = debtAmount; // Ensure creditorId is parsed to int
+        }
+        deudaPorUsuario[int.parse(debtorId)] = debts;
+      }
+    }
+
+    // Update the deudaPorUsuario map in the current instance
+    this.deudaPorUsuario = deudaPorUsuario;
+
+    print('Deudas updated successfully');
+  } else {
+    throw Exception('Failed to update deudas');
+  }
+}
+
 }

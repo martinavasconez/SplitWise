@@ -15,7 +15,13 @@ void main() async {
 
   await user?.listaDeGrupos[0].updateGroupDetails();
 
-  
+  var userID = user?.id;
+
+  print('test');
+
+  await user?.listaDeGrupos[0].updateDeudaPorUsuario();
+
+  await user?.listaDeGrupos[0].updateGroupDetails();
 
   print("done");
 
