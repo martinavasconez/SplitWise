@@ -8,7 +8,7 @@ import 'Usuario.dart';
 class GroupScreen extends StatefulWidget {
   final Usuario? usuario;
   final Grupo? group;
-  
+
   GroupScreen({this.group, this.usuario});
 
   @override
@@ -112,7 +112,7 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen(usuario: widget.usuario,)));
               },
             ),
             ListTile(
@@ -123,7 +123,7 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen(usuario: widget.usuario,)));
               },
             ),
           ],

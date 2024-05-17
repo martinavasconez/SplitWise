@@ -19,20 +19,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
   TabController? _tabController;
   final TextEditingController groupNameController = TextEditingController();
   final TextEditingController detailsController = TextEditingController();
-  late Grupo newGroup; // Variable para almacenar el nuevo grupo
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    newGroup = Grupo(
-      id: 0, // Aquí puedes asignar un ID único al grupo
-      nombre: '',
-      articulos: {},
-      total: 0.0,
-      totalPorUsuario: {},
-      deudaPorUsuario: {},
-    );
   }
 
   @override
@@ -45,15 +36,21 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
     _tabController?.animateTo(1);
   }
 
-  void _createGroup() {
+  void _createGroup() async {
     // Asignamos los valores ingresados por el usuario al nuevo grupo
-    newGroup.nombre = groupNameController.text;
-    // Aquí puedes continuar asignando otros valores del grupo si es necesario
+    String groupName = groupNameController.text;
+    String groupDetails = detailsController.text;
 
-    // Lógica para crear el grupo
-    // En este punto, podrías guardar el nuevo grupo en tu base de datos o realizar otras acciones necesarias
-    // En este ejemplo, simplemente lo pasamos a la pantalla GroupScreen
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(group: newGroup, usuario: widget.usuario)));
+    try {
+      // Llamamos al método createAndFetchGroups del usuario actual
+      await widget.usuario!.createAndFetchGroups(groupName, groupDetails);
+      
+      // Navegamos a la pantalla GroupScreen con el usuario actualizado
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(usuario: widget.usuario)));
+    } catch (e) {
+      // Manejar errores, por ejemplo, mostrar un mensaje de error
+      print(e); // Reemplaza esto con una forma adecuada de manejar errores en tu aplicación
+    }
   }
 
   @override
@@ -78,15 +75,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                "Johanna Doe",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.nombre?? "Johanna Doe",
+                style: TextStyle(color: Colors.black),
               ),
               accountEmail: Text(
-                "johanna@company.com",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.correo?? "johanna@company.com",
+                style: TextStyle(color: Colors.black),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/JeanDoe.png'), // Ruta de la imagen de perfil
+                backgroundImage: AssetImage('assets/images/JeanDoe.png'),
                 backgroundColor: Colors.white,
               ),
               decoration: BoxDecoration(
@@ -97,29 +94,29 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
               leading: Icon(Icons.group),
               title: Text(
                 'Groups',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(usuario: widget.usuario)));
               },
             ),
             ListTile(
               leading: Icon(Icons.group_add),
               title: Text(
                 'Create Group',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen(usuario: widget.usuario)));
               },
             ),
             ListTile(
               leading: Icon(Icons.input),
               title: Text(
                 'Join Group',
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
@@ -165,7 +162,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                                                    onPressed: _nextTab,
+                          onPressed: _nextTab,
                           child: Text('Next'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
