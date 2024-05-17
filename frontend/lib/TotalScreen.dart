@@ -27,6 +27,22 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
+  Widget buildPersonCard(String name, String paid, String toBePaid) {
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.person),
+        title: Text(name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Paid: \$$paid'),
+            Text('To be paid: \$$toBePaid'),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,32 +150,9 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
                 Expanded(
                   child: ListView(
                     children: [
-                      Card(
-                        child: ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text('Gaby'),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Paid: \$20'),
-                              Text('To be paid: \$5'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: ListTile(
-                          leading: Icon(Icons.person),
-                          title: Text('Martina'),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Paid: \$20'),
-                              Text('To be paid: \$5'),
-                            ],
-                          ),
-                        ),
-                      ),
+                      buildPersonCard('Gaby', '20', '5'),
+                      buildPersonCard('Martina', '20', '5'),
+                      buildPersonCard('Otro', '20', '5')
                     ],
                   ),
                 ),
