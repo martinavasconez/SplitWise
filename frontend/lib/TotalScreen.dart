@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Grupo.dart';
-import 'Usuario.dart';
+import 'Usuario.dart'; // Make sure this import points correctly to your Grupo.dart file
 
 class TotalScreen extends StatefulWidget {
   final Usuario? usuario;
@@ -27,24 +27,31 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
-  Widget buildPersonCard(String name, String paid, String toBePaid) {
+  Widget buildPersonCard(int userId, String userName, double totalSpent) {
     return Card(
-      child: ListTile(
+      child: ExpansionTile(
         leading: Icon(Icons.person),
-        title: Text(name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Paid: \$$paid'),
-            Text('To be paid: \$$toBePaid'),
-          ],
-        ),
+        title: Text(userName),
+        subtitle: Text('Total Spent: \$${totalSpent.toStringAsFixed(2)}'),
+        children: widget.group!.deudaPorUsuario[userId]?.entries.map((entry) {
+          int creditorId = entry.key;
+          double amount = entry.value;
+          String creditorName = widget.group!.listaDeUsuarios[creditorId]?? 'Unknown';
+          return ListTile(
+            title: Text('$creditorName will receive \$${amount.toStringAsFixed(2)}'),
+          );
+        }).toList()?? [],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Assuming widget.group is populated and contains valid data
+    if (widget.group == null || widget.group!.totalPorUsuario.isEmpty) {
+      return Center(child: Text("No data available"));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Total'),
@@ -68,6 +75,7 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
       body: TabBarView(
         controller: _tabController,
         children: [
+          // First tab content
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(
@@ -111,6 +119,7 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
               ],
             ),
           ),
+          // Second tab content
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(
@@ -124,36 +133,15 @@ class _TotalScreenState extends State<TotalScreen> with SingleTickerProviderStat
                   ),
                 ),
                 Divider(color: Colors.black),
-                Text(
-                  'The total per person is:',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color.fromARGB(255, 78, 179, 204)),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '\$20',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
                 Expanded(
-                  child: ListView(
-                    children: [
-                      buildPersonCard('Gaby', '20', '5'),
-                      buildPersonCard('Martina', '20', '5'),
-                      buildPersonCard('Otro', '20', '5')
-                    ],
+                  child: ListView.builder(
+                    itemCount: widget.group!.listaDeUsuarios.length,
+                    itemBuilder: (context, index) {
+                      int userId = widget.group!.listaDeUsuarios.keys.elementAt(index);
+                      String userName = widget.group!.listaDeUsuarios[userId]!;
+                      double totalSpent = widget.group!.totalPorUsuario[userId]?? 0;
+                      return buildPersonCard(userId, userName, totalSpent);
+                    },
                   ),
                 ),
               ],
