@@ -7,9 +7,8 @@ import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
 
 class JoinGroupScreen extends StatefulWidget {
   final Usuario? usuario;
-  final Grupo? group;
 
-  JoinGroupScreen({this.group, this.usuario});
+  JoinGroupScreen({required this.usuario});
 
   @override
   _JoinGroupScreenState createState() => _JoinGroupScreenState();
@@ -29,6 +28,31 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
   void dispose() {
     _tabController?.dispose();
     super.dispose();
+  }
+
+  Future<void> _joinGroup() async {
+    try {
+      int groupId = int.tryParse(_groupCodeController.text)?? 0;
+      if (widget.usuario!= null && groupId > 0) {
+        await widget.usuario!.joinGroup(groupId);
+        // Navigate to the GroupScreen after successfully joining the group
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => GroupScreen(
+              group: Grupo(id: groupId, nombre: 'Joined Group'),
+              usuario: widget.usuario,
+            ),
+          ),
+        );
+      } else {
+        // Handle invalid input or other errors
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid group code.')));
+      }
+    } catch (e) {
+      // Handle exceptions, e.g., failed to join group
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to join group.')));
+    }
   }
 
   @override
@@ -93,17 +117,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => GroupScreen(
-                                  group: Grupo(id: 1, nombre: 'Group Code'),
-                                  usuario: widget.usuario,
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: _joinGroup,
                           child: Text('Join Group'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 78, 179, 204), // Color del botón
@@ -130,15 +144,15 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                "Johanna Doe",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.nombre?? "Johanna Doe",
+                style: TextStyle(color: Colors.black),
               ),
               accountEmail: Text(
-                "johanna@company.com",
-                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+                widget.usuario?.correo?? "johanna@company.com",
+                style: TextStyle(color: Colors.black),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/JeanDoe.png'), // Ruta de la imagen de perfil
+                backgroundImage: AssetImage('assets/images/JeanDoe.png'),
                 backgroundColor: Colors.white,
               ),
               decoration: BoxDecoration(
@@ -153,7 +167,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroupScreen(usuario: widget.usuario,)));
               },
             ),
             ListTile(
@@ -164,7 +178,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CreateGroupScreen(usuario: widget.usuario,)));
               },
             ),
             ListTile(
@@ -175,7 +189,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> with SingleTickerProv
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen(usuario: widget.usuario)));
               },
             ),
           ],

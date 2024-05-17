@@ -120,7 +120,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
               ),
               onTap: () {
                 Navigator.pop(context); // Cierra el drawer
-                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => JoinGroupScreen(usuario: widget.usuario,)));
               },
             ),
           ],
