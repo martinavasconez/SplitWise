@@ -14,6 +14,11 @@ void main() async {
   await user?.fetchGroups();
   print(user?.listaDeGrupos.length);
 
+  await user?.joinGroup(1001);
+  print(user?.listaDeGrupos.length);
+
+  print("done");
+
 
 
 }

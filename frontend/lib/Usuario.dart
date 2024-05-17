@@ -84,6 +84,37 @@ class Usuario {
   }
 }
 
+  Future<void> createAndFetchGroups(String nombre, String detalles) async {
+      final response = await http.post(
+        Uri.parse('${api.apiBaseUrlEmulator}/create_group'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'nombre': nombre, 'detalles': detalles, 'user_id': id}),
+      );
+
+      if (response.statusCode == 201) {
+        await this.fetchGroups(); // Refresh the user's group list
+      } else {
+        throw Exception('Failed to create group');
+      }
+    }
+
+    Future<void> joinGroup(int groupId) async {
+    final response = await http.post(
+      Uri.parse('${api.apiBaseUrlEmulator}/join_group/$groupId'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'user_id': this.id.toString()}),
+    );
+
+    if (response.statusCode == 200) {
+      // Assuming the response includes the joined group's details
+      await this.fetchGroups(); // Refresh the user's group list
+    } else {
+      throw Exception('Failed to join group');
+    }
+  }
+
+
+
 
 
 }
