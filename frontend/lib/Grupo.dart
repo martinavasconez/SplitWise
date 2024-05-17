@@ -1,3 +1,7 @@
+import 'package:http/http.dart' as http;
+import '/config/api.dart' as api; // Import the Api class
+import 'dart:convert';
+
 class Grupo {
   int id;
   String nombre;
@@ -24,23 +28,52 @@ class Grupo {
   });
 
   factory Grupo.fromJson(Map<String, dynamic> json) {
-    return Grupo(
-      id: json['id'],
-      nombre: json['nombre'],
-      detalles: json['detalles'] ?? "", // Provide a default value in case 'detalles' is null
-      total: double.tryParse(json['total']) ?? 0.0, // Attempt to parse 'total' as a double, defaulting to 0.0 if parsing fails
-    );
+  return Grupo(
+    id: json['id'],
+    nombre: json['nombre'],
+    detalles: json['detalles']?? "", // Provide a default value in case 'detalles' is null
+    total: double.tryParse(json['total'])?? 0.0, // Attempt to parse 'total' as a double, defaulting to 0.0 if parsing fails
+  );
+}
+
+  Future<void> updateGroupDetails() async {
+    final response = await http.get(Uri.parse('${api.apiBaseUrlEmulator}/load-group-details/$id'));
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      articulos = {};
+      totalPorUsuario = {};
+      listaDeUsuarios = {};
+
+      // Actualizar articulos
+      for (var item in jsonResponse['articulos']) {
+        int userId = item['usuario_id'];
+        String itemName = item['nombre_articulo'];
+        double cost = double.parse(item['costo']); 
+        if (!articulos.containsKey(userId)) {
+          articulos[userId] = {};
+        }
+        articulos[userId]![itemName] = cost;
+      }
+
+      // Actualizar total
+      total = double.parse(jsonResponse['total']);
+
+      // Actualizar totalPorUsuario
+      for (var userTotal in jsonResponse['totalPorUsuario']) {
+        int userId = userTotal['id_usuario'];
+        double totalCost = double.parse(userTotal['total']);
+        totalPorUsuario[userId] = totalCost;
+      }
+
+      // Actualizar listaDeUsuarios
+      for (var user in jsonResponse['usuarios']) {
+        int userId = user['id_usuario'];
+        String userName = user['nombre_usuario'];
+        listaDeUsuarios[userId] = userName;
+      }
+    } else {
+      throw Exception('Failed to update group details');
+    }
   }
 
-  // Método para añadir un artículo al grupo
-  void addArticulo(int usuarioId, String nombreArticulo, double costo) {
-    if (articulos.containsKey(usuarioId)) {
-      articulos[usuarioId]![nombreArticulo] = costo;
-    } else {
-      articulos[usuarioId] = {nombreArticulo: costo};
-    }
-    total += costo;
-    totalPorUsuario.update(usuarioId, (valor) => valor + costo, ifAbsent: () => costo);
-    // Aquí deberías actualizar también la deudaPorUsuario según necesites
-  }
 }

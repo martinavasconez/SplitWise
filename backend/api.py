@@ -151,6 +151,14 @@ def add_item():
     query = "INSERT INTO Articulos (grupo_id, usuario_id, nombre_articulo, costo) VALUES (%s, %s, %s, %s)"
     cursor.execute(query, (grupo_id, user_id, nombre_articulo, costo))
 
+    # Update the group total
+    query_update_total = """
+    UPDATE Grupos SET total = (
+        SELECT SUM(costo) FROM Articulos WHERE grupo_id = %s
+    ) WHERE id = %s
+    """
+    cursor.execute(query_update_total, (grupo_id, grupo_id))
+
     connection.commit()
 
     return jsonify({"message": "Item added successfully", "item": {"id": cursor.lastrowid, "nombre_articulo": nombre_articulo, "costo": costo}}), 201
@@ -254,11 +262,17 @@ def load_group_details(group_id):
     cursor.execute(query_users, (group_id,))
     usuarios = [{"id_usuario": row[0], "nombre_usuario": row[1]} for row in cursor.fetchall()]
 
+    # Query to get the total for the group
+    query_total = "SELECT total FROM Grupos WHERE id = %s"
+    cursor.execute(query_total, (group_id,))
+    total = cursor.fetchone()[0]
+
     connection.close()
 
     # Constructing the final response
     response = {
         "articulos": articulos,
+        "total": total,
         "totalPorUsuario": total_por_usuario,
         "usuarios": usuarios
     }
