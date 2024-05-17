@@ -40,6 +40,7 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
         Grupo grupoSeleccionado = widget.usuario!.getGroupById(int.parse(groupCode))!;
         grupoSeleccionado.updateGroupDetails();
         grupoSeleccionado.updateDeudaPorUsuario();
+        
          Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailsScreen(group: grupoSeleccionado, usuario: widget.usuario)));
 },
 
