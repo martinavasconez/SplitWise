@@ -129,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   try {
                     // Use the signUp method from Usuario.dart
                     Usuario newUser = await Usuario.signUp(nameController.text, emailController.text, passwordController.text);
-
+                    await newUser.fetchGroups();
                     // Navigate to SignInScreen on success
                     Navigator.push(context, MaterialPageRoute(builder: (_) => GroupScreen(usuario: newUser,)));
 

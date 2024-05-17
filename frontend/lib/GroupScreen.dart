@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'CreateGroupScreen.dart';
 import 'JoinGroupScreen.dart';
-import 'GroupDetailsScreen.dart'; // Asegúrate de importar la pantalla de detalles del grupo
-import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
-import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
+import 'GroupDetailsScreen.dart';
+import 'Grupo.dart';
+import 'Usuario.dart';
 
 class GroupScreen extends StatefulWidget {
-  final Grupo? group; // Ahora group puede ser nulo
   final Usuario? usuario;
-
+  final Grupo? group;
+  
   GroupScreen({this.group, this.usuario});
 
   @override
@@ -79,11 +79,11 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                widget.usuario?.nombre ?? "Johanna Doe",
+                widget.usuario?.nombre?? "Johanna Doe",
                 style: TextStyle(color: Colors.black),
               ),
               accountEmail: Text(
-                widget.usuario?.correo ?? "johanna@company.com",
+                widget.usuario?.correo?? "johanna@company.com",
                 style: TextStyle(color: Colors.black),
               ),
               currentAccountPicture: CircleAvatar(
@@ -132,17 +132,12 @@ class _GroupScreenState extends State<GroupScreen> with SingleTickerProviderStat
       body: TabBarView(
         controller: _tabController,
         children: [
-          ListView(
-            children: [
-              if (widget.group != null)
-                buildGroupCard(widget.group!.nombre ?? '',('Code: ${widget.group!.id ?? ''}')),
-              // Cards que ya estaban implementadas
-              buildGroupCard('Plan Zens', '1139'),
-              buildGroupCard('Restaurante KFC', '3365'),
-              buildGroupCard('Uber', '3434'),
-              buildGroupCard('Otro', '234'),
-              buildGroupCard('Otro', '12114'),
-            ],
+          ListView.builder(
+            itemCount: widget.usuario?.listaDeGrupos?.length?? 0,
+            itemBuilder: (context, index) {
+              Grupo grupo = widget.usuario!.listaDeGrupos![index];
+              return buildGroupCard(grupo.nombre!, grupo.id.toString());
+            },
           ),
         ],
       ),

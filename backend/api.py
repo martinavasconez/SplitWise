@@ -80,7 +80,7 @@ def create_group():
     group_id = cursor.lastrowid
 
     query = "INSERT INTO Usuario_Grupo (usuario_id, grupo_id) VALUES (%s, %s)"
-    cursor.execute(query, (request.json['user_id'], group_id))
+    cursor.execute(query, (user_id, group_id))
 
     connection.commit()
 

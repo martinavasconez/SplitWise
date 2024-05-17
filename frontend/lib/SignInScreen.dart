@@ -21,6 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
   try {
     // Intentamos iniciar sesión usando el método signIn de Usuario
     Usuario? usuario = await Usuario.signIn(email, password);
+    await usuario?.fetchGroups();
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => GroupScreen(usuario: usuario,)),
