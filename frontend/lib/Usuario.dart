@@ -18,6 +18,15 @@ class Usuario {
     this.listaDeGrupos = const [],
   });
 
+ Grupo? getGroupById(int groupId) {
+    for (var grupo in listaDeGrupos) {
+      if (grupo.id == groupId) {
+        return grupo;
+      }
+    }
+    return null; // Si no se encuentra el grupo
+  }
+
   // Factory constructor that creates a Usuario instance from a JSON object
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
@@ -112,9 +121,5 @@ class Usuario {
       throw Exception('Failed to join group');
     }
   }
-
-
-
-
 
 }

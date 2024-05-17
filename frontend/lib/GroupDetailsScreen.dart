@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'TotalScreen.dart';
-import 'AddItemScreen.dart'; // Asegúrate de crear esta pantalla
-import 'Grupo.dart'; // Importamos la clase Grupo para su uso aquí
-import 'Usuario.dart'; // Importamos la clase Usuario para su uso aquí
+import 'package:proyectofinal/AddItemScreen.dart';
+import 'package:proyectofinal/TotalScreen.dart';
+import 'Grupo.dart';
+import 'Usuario.dart';
 
 class GroupDetailsScreen extends StatefulWidget {
   final Usuario? usuario;
@@ -34,7 +34,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
       child: ListTile(
         leading: Icon(Icons.shopping_cart),
         title: Text(title),
-        subtitle: Text('Gaby'), // Aquí puedes cambiar el nombre dinámicamente si es necesario
+        subtitle: Text(widget.group!.nombre!), // Muestra el nombre del grupo
         trailing: Text('\$$price'),
       ),
     );
@@ -44,7 +44,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Plan Zens'),
+        title: Text(widget.group!.nombre!), // Muestra el nombre del grupo en la barra de navegación
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -80,7 +80,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Here are the details of the group...',
+                  widget.group!.detalles ?? 'No details available', // Muestra los detalles del grupo si están disponibles
                   style: TextStyle(
                     fontSize: 14,
                   ),
@@ -103,11 +103,12 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> with SingleTick
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '2 members in the group',
+                '${widget.group!.miembros.length} members in the group',
                   style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
+                  fontSize: 14,
+                 ),
+              ),
+
                 SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
